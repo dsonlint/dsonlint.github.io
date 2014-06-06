@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>DSON</title>
+        <script type="text/javascript" src="dson.js"></script>
+    </head>
+
+    <body>
+        <h1>DSON</h1>
+        <textarea id="in" rows="10" cols="80"></textarea> <br/>
+        <button onclick="run()">Parse</button>
+        <h1>JSON</h1>
+        <div id="error" style="color: red"></div>
+        <textarea id="out" rows="10" cols="80" readonly="readonly"></textarea> <br/>
+    </body>
+
+    <script>
+        var ein = document.getElementById("in");
+        var eout = document.getElementById("out");
+        var eerror = document.getElementById("error");
+
+        function run() {
+            var v = ein.value;
+
+            try {
+                var result = DSON.parse(v);
+                eerror.innerText = "";
+                eout.value = JSON.stringify(result);
+            } catch(e) {
+                eerror.innerText = e;
+                eout.value = "";
+            }
+        }
+    </script>
+</html>
