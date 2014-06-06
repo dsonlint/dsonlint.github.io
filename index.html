@@ -7,7 +7,9 @@
 
     <body>
         <h1>DSON</h1>
-        <textarea id="in" rows="10" cols="80"></textarea> <br/>
+        <textarea id="in" rows="10" cols="80">
+            such "foo" is so "bar" also "baz" and "fizzbuzz" many wow
+        </textarea> <br/>
         <button onclick="run()">Parse</button>
         <h1>JSON</h1>
         <div id="error" style="color: red"></div>
@@ -38,5 +40,7 @@
                 eout.value = "";
             }
         }
+
+        run();
     </script>
 </html>
