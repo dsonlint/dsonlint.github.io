@@ -2,47 +2,83 @@
 <html>
     <head>
         <title>DSON</title>
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
         <script type="text/javascript" src="dson.min.js"></script>
     </head>
 
     <body>
-        <img src="doge.gif" style="float: left"><h1>Doge Serialized Object Notation</h1>
-        <p>A quick DSON to JSON parser you can try in your browser</p>
-        <div style="clear: both"></div>
+    <a href="https://github.com/dsonlint/dsonlint.github.io"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/8b6b8ccc6da3aa5722903da7b58eb5ab1081adee/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f6f72616e67655f6666373630302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_orange_ff7600.png"></a>
+        <div class="container-fluid">
+            <div class="jumbotron row" style="padding-bottom: 0;">
+                <img src="doge.gif" style="float: left"><h1>Doge Serialized Object Notation</h1>
+                <p>A quick DSON to JSON parser you can try in your browser</p>
+                <div class="clearfix"></div>
+            </div>
+            <div class="row">
+                <h2>Spec Examples</h2>
+                <ul class="pagination" id="examples">
+                    <li><a href="javascript:load_example(1)">1</a></li>
+                    <li><a href="javascript:load_example(2)">2</a></li>
+                    <li><a href="javascript:load_example(3)">3</a></li>
+                    <li><a href="javascript:load_example(4)">4</a></li>
+                </ul>
+            </div>
 
-        <h2>DSON</h2>
-        <textarea id="in" rows="10" cols="80">such "foo" is so "bar" also "baz" and "fizzbuzz" many wow</textarea> <br/>
-        <button onclick="run()">Parse</button>
-        <h2>JSON</h2>
-        <div id="error" style="color: red"></div>
-        <textarea id="out" rows="10" cols="80" readonly="readonly"></textarea> <br/>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <h2>DSON</h2>
+                    <textarea class="form-control" id="dson" rows="10">such "foo" is so "bar" also "baz" and "fizzbuzz" many wow</textarea> <br/>
+                    <button class="btn btn-primary" onclick="run_dson()">Parse</button>
+                </div>
+                <div class="form-group col-md-6">
+                    <h2>JSON</h2>
+                    <textarea class="form-control" id="json" rows="10" cols="80" readonly="readonly"></textarea> <br/>
+                    <button class="btn btn-primary" onclick="run_json()">Parse</button>
+                </div>
+            </div>
 
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <p>Follows the DOGEON/DSON spec. See <a href="/spec/">here</a>.</p>
-        <p>This parser implemented by JDeuce. Source <a href="https://github.com/JDeuce/dson_parser">here</a>.</p>
+            <div class="row pull-right">
+                <p>Follows the DOGEON/DSON spec. See <a href="/spec/">here</a>.</p>
+                <p>This page implemented with <span class="glyphicon glyphicon-heart"></span> by JDeuce.</p>
+                <p>Get dson_parser <a href="https://github.com/JDeuce/dson_parser">here</a>.</p>
+            </div>
+        </div>
     </body>
 
     <script>
-        var ein = document.getElementById("in");
-        var eout = document.getElementById("out");
-        var eerror = document.getElementById("error");
+        var examples = [
+            'such "foo" is "bar", "doge" is "shibe" wow',
+            'such "foo" is such "shiba" is "inu", "doge" is yes wow wow',
+            'such "foo" is so "bar" also "baz" and "fizzbuzz" many wow',
+            'such "foo" is 42, "bar" is 42very3 wow'
+        ];
+        var edson = document.getElementById("dson");
+        var ejson = document.getElementById("json");
 
-        function run() {
+        function run(ein, eout, methodin, methodout) {
             var v = ein.value;
 
             try {
-                var result = DSON.parse(v);
-                eerror.innerText = "";
-                eout.value = JSON.stringify(result);
+                var result = methodin(v);
+                eout.value = methodout(result);
             } catch(e) {
-                eerror.innerText = e;
-                eout.value = "";
+                eout.value = e;
             }
         }
 
-        run();
+        function load_example(i) {
+            edson.value = examples[i-1];
+            run_dson();
+        }
+
+        var run_dson = run.bind(run, edson, ejson, DSON.parse, JSON.stringify);
+        var run_json = run.bind(run, ejson, edson, JSON.parse, DSON.stringify);
+
+        load_example(1);
     </script>
 </html>
